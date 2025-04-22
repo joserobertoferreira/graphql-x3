@@ -1,5 +1,6 @@
 # API GraphQL X3
 
+```
 api/
 ├── app/                   # Código principal da aplicação
 │   ├── __init__.py
@@ -45,3 +46,4 @@ api/
 ├── requirements.txt       # dependências de projeto
 ├── requirements-dev.txt   # dependências de desenvolvimento
 └── README.md
+```
