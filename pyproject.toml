@@ -49,10 +49,10 @@ dev = [
 ]
 
 [tool.taskipy.tasks]
-run = "uvicorn main:app --reload"
+run = "uvicorn app.main:app --reload"
 
 [tool.ruff]
-line-length = 90
+line-length = 120
 extend-exclude = ['migrations']
 
 [tool.ruff.lint]
