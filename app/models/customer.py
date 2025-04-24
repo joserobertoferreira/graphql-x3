@@ -10,23 +10,21 @@ from sqlalchemy import (
     PrimaryKeyConstraint,
     SmallInteger,
     Unicode,
-    and_,
     text,
 )
 from sqlalchemy.dialects.mssql import TINYINT
-from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-import app.models.address
 from app.core.settings import DEFAULT_LEGACY_DATETIME
 from app.database.base import Base
 from app.database.generics_mixins import ArrayColumnMixin
-from app.database.mixins import AuditMixin, CreateUpdateDateMixin, DimensionTypesMixin, PrimaryKeyMixin
+from app.database.mixins import AuditMixin, CreateUpdateDateMixin, PrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.address import Address
 
 
-class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayColumnMixin, DimensionTypesMixin):
+class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayColumnMixin):
     __tablename__ = 'BPCUSTOMER'
     __table_args__ = (
         PrimaryKeyConstraint('ROWID', name='BPCUSTOMER_ROWID'),
@@ -183,8 +181,8 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         'ZCRYNAM_0', Unicode(40, 'Latin1_General_BIN2'), server_default=text("''")
     )
 
-    statistical_prop, statistical_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='TSCCOD_',
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='TSCCOD',
         property_name='statistical',
         count=5,
         column_type=Unicode(20, 'Latin1_General_BIN2'),
@@ -192,11 +190,31 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text("''"),
     )
 
-    statisticalGroup: Mapped[List[Optional[str]]] = statistical_prop
-    locals().update(statistical_cols)
+    statisticalGroup: Mapped[List[Optional[str]]] = _properties
 
-    dimension_prop, dimension_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='CCE_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='DIE',
+        property_name='dimensionType',
+        count=20,
+        column_type=Unicode(10, 'Latin1_General_BIN2'),
+        python_type=str,
+        server_default=text("''"),
+    )
+
+    dimensionsType: Mapped[List[Optional[str]]] = _properties
+
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='CCE',
         property_name='dimension',
         count=20,
         column_type=Unicode(15, 'Latin1_General_BIN2'),
@@ -204,11 +222,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text("''"),
     )
 
-    dimensions: Mapped[List[Optional[str]]] = dimension_prop
-    locals().update(dimension_cols)
+    dimensions: Mapped[List[Optional[str]]] = _properties
 
-    invdtaamt_prop, invdtaamt_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='INVDTAAMT_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='INVDTAAMT',
         property_name='invdtaamt',
         count=30,
         column_type=Numeric(20, 5),
@@ -216,11 +238,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text('((0))'),
     )
 
-    percentageOrAmount: Mapped[List[Optional[decimal.Decimal]]] = invdtaamt_prop
-    locals().update(invdtaamt_cols)
+    percentageOrAmount: Mapped[List[Optional[decimal.Decimal]]] = _properties
 
-    invdta_prop, invdta_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='INVDTA_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='INVDTA',
         property_name='invdta',
         count=30,
         column_type=SmallInteger,
@@ -228,11 +254,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text('((0))'),
     )
 
-    invoicingElement: Mapped[List[Optional[int]]] = invdta_prop
-    locals().update(invdta_cols)
+    invoicingElement: Mapped[List[Optional[int]]] = _properties
 
-    paymentDay_prop, paymentDay_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='DAYMON_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='DAYMON',
         property_name='paymentDay',
         count=6,
         column_type=SmallInteger,
@@ -240,11 +270,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text('((0))'),
     )
 
-    paymentDay: Mapped[List[Optional[int]]] = paymentDay_prop
-    locals().update(paymentDay_cols)
+    paymentDay: Mapped[List[Optional[int]]] = _properties
 
-    cashIsActive_prop, cashIsActive_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='CSHVATRGM_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='CSHVATRGM',
         property_name='cashIsActive',
         count=9,
         column_type=TINYINT,
@@ -252,11 +286,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text('((0))'),
     )
 
-    cashIsActive: Mapped[List[Optional[int]]] = cashIsActive_prop
-    locals().update(cashIsActive_cols)
+    cashIsActive: Mapped[List[Optional[int]]] = _properties
 
-    vatStartDate_prop, vatStartDate_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='VATSTRDAT_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='VATSTRDAT',
         property_name='vatStartDate',
         count=9,
         column_type=DateTime,
@@ -264,11 +302,15 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'"),
     )
 
-    vatStartDate: Mapped[List[Optional[datetime.datetime]]] = vatStartDate_prop
-    locals().update(vatStartDate_cols)
+    vatStartDate: Mapped[List[Optional[datetime.datetime]]] = _properties
 
-    vatEndDate_prop, vatEndDate_cols = ArrayColumnMixin.create_array_property(
-        db_column_name='VATENDDAT_',
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    _properties, _columns = ArrayColumnMixin.create_array_property(
+        db_column_prefix='VATENDDAT',
         property_name='vatEndDate',
         count=9,
         column_type=DateTime,
@@ -276,16 +318,18 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'"),
     )
 
-    vatEndDate: Mapped[List[Optional[datetime.datetime]]] = vatEndDate_prop
-    locals().update(vatEndDate_cols)
+    vatEndDate: Mapped[List[Optional[datetime.datetime]]] = _properties
 
-    customerAddresses: Mapped[List['Address']] = relationship(  # noqa: F821
+    for _attr_name, _mapped_column in _columns.items():
+        locals()[_attr_name] = _mapped_column
+
+    del _attr_name, _mapped_column, _properties, _columns
+
+    customerAddresses: Mapped[List['Address']] = relationship(
         'Address',
-        primaryjoin=lambda: and_(
-            foreign(app.models.address.Address.entityNumber) == Customer.customerCode,
-            foreign(app.models.address.Address.entityType) == 1,
-        ),
-        back_populates='customer',
+        primaryjoin='and_(Address.entityNumber == Customer.customerCode, Address.entityType == 1)',
+        foreign_keys='Address.entityNumber',
+        overlaps='siteAddresses',
         lazy='selectin',
         cascade='save-update, merge, refresh-expire, expunge',
     )

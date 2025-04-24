@@ -19,7 +19,7 @@ class ArrayColumnMixin:
     @classmethod
     def create_array_property(
         cls,
-        db_column_name: str,
+        db_column_prefix: str,
         property_name: str,
         count: int,
         column_type: Type[TypeEngine],  # Ex: Date, Unicode, Integer (tipo SQLAlchemy)
@@ -30,7 +30,7 @@ class ArrayColumnMixin:
         Create and return a hybrid_property and a dictionary of the underlying Mapped columns.
 
         Args:
-            db_column_name: Prefix of the column names in the database (e.g., 'DATINV').
+            db_column_prefix: Prefix of the column names in the database (e.g., 'DATINV').
             property_name: Desired name for the hybrid property in the Python model (e.g., 'datinv').
             count: Number of columns in the database (e.g., 3 for DATINV_0, DATINV_1, DATINV_2).
             column_type: The SQLAlchemy type for the columns (e.g., Date, Unicode(10), Integer).
@@ -48,7 +48,7 @@ class ArrayColumnMixin:
 
         # 1. Generate names and create Mapped objects for individual columns
         for i in range(count):
-            db_column_name = f'{db_column_name}_{i}'
+            db_column_name = f'{db_column_prefix}_{i}'
             # use property_name to ensure uniqueness if using the mixin multiple times
             internal_attr_name = f'_{property_name}_{i}'
             internal_attr_names.append(internal_attr_name)
@@ -82,77 +82,3 @@ class ArrayColumnMixin:
 
         # 5. Return the hybrid_property and the dictionary of mapped columns
         return array_prop, mapped_columns
-
-
-# class GenericsMixin:
-#     """
-#     Mixin class for generic fields and methods.
-#     This class provides a set of common fields and methods that can be used across
-#     different models.
-#     It includes fields for tracking creation and modification timestamps,
-#     as well as a UUID field for unique identification.
-#     """
-
-#     @declared_attr
-#     def percentageOrAmount0(cls) -> Mapped[decimal.Decimal]:
-#         return mapped_column('INVDTAAMT_0', Numeric(20, 5), server_default=text('((0))'))
-
-#     INVDTAAMT_1: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_2: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_3: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_4: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_5: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_6: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_7: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_8: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_9: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_10: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_11: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_12: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_13: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_14: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_15: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_16: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_17: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_18: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_19: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_20: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_21: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_22: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_23: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_24: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_25: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_26: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_27: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_28: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTAAMT_29: Mapped[decimal.Decimal] = mapped_column(Numeric(20, 5))
-#     INVDTA_0: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_1: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_2: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_3: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_4: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_5: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_6: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_7: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_8: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_9: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_10: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_11: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_12: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_13: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_14: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_15: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_16: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_17: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_18: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_19: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_20: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_21: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_22: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_23: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_24: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_25: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_26: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_27: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_28: Mapped[int] = mapped_column(SmallInteger)
-#     INVDTA_29: Mapped[int] = mapped_column(SmallInteger)

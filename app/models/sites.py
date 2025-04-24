@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Index, PrimaryKeyConstraint, SmallInteger, Unicode, and_, text
+from sqlalchemy import Index, PrimaryKeyConstraint, SmallInteger, Unicode, text
 from sqlalchemy.dialects.mssql import TINYINT
-from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-import app.models.address
 from app.database.base import Base
 from app.database.mixins import (
     AuditMixin,
@@ -15,10 +14,6 @@ from app.database.mixins import (
 
 if TYPE_CHECKING:
     from app.models.address import Address
-
-
-# Constants
-ENTITY_TYPE_SITE = 3
 
 
 class Sites(Base, AuditMixin, PrimaryKeyMixin, DimensionTypesMixin, DimensionMixin):
@@ -131,11 +126,9 @@ class Sites(Base, AuditMixin, PrimaryKeyMixin, DimensionTypesMixin, DimensionMix
 
     siteAddresses: Mapped[List['Address']] = relationship(
         'Address',
-        primaryjoin=lambda: and_(
-            foreign(app.models.address.Address.entityNumber) == Sites.code,
-            foreign(app.models.address.Address.entityType) == ENTITY_TYPE_SITE,
-        ),
-        back_populates='site',
+        primaryjoin='and_(Address.entityNumber == Sites.code, Address.entityType == 3)',
+        foreign_keys='Address.entityNumber',
+        overlaps='customerAddresses',
         lazy='selectin',
         cascade='save-update, merge, refresh-expire, expunge',
     )

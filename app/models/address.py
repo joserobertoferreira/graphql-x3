@@ -1,21 +1,14 @@
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Index, Integer, PrimaryKeyConstraint, Unicode, and_, text
+from sqlalchemy import Index, Integer, PrimaryKeyConstraint, Unicode, text
 from sqlalchemy.dialects.mssql import TINYINT
-from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
-# import app.models.customer
-# import app.models.sites
 from app.database.base import Base
 from app.database.mixins import AuditMixin, PrimaryKeyMixin
 
-# if TYPE_CHECKING:
-from app.models.customer import Customer
-from app.models.sites import Sites
-
-# Constants
-ENTITY_TYPE_SITE = 3
-ENTITY_TYPE_CUSTOMER = 1
+if TYPE_CHECKING:
+    pass
 
 
 class Address(Base, AuditMixin, PrimaryKeyMixin):
@@ -84,32 +77,3 @@ class Address(Base, AuditMixin, PrimaryKeyMixin):
     isValid: Mapped[int] = mapped_column('ADRVAL_0', TINYINT, server_default=text('((1))'))
     gln: Mapped[str] = mapped_column('GLNCOD_0', Unicode(13, 'Latin1_General_BIN2'), server_default=text("''"))
     crn: Mapped[str] = mapped_column('CRN_0', Unicode(20, 'Latin1_General_BIN2'), server_default=text("''"))
-
-    # site: Mapped[Optional['Sites']] = relationship(
-    #     'Sites',
-    #     primaryjoin=lambda: and_(Address.entityNumber == foreign(Sites.code), Address.entityType == ENTITY_TYPE_SITE),
-    #     foreign_keys=[entityNumber],
-    #     viewonly=True,
-    #     back_populates='siteAddresses',
-    #     lazy='joined',
-    # )
-
-    site: Mapped[Optional['Sites']] = relationship(
-        'Sites',
-        primaryjoin='and_(Address.entityNumber == foreign(Sites.code), Address.entityType == 3)',
-        overlaps='siteAddresses',
-        back_populates='siteAddresses',
-        lazy='joined',
-    )
-
-    customer: Mapped[Optional['Customer']] = relationship(
-        'Customer',
-        primaryjoin=lambda: and_(
-            Address.entityNumber == foreign(Customer.customerCode),
-            Address.entityType == ENTITY_TYPE_CUSTOMER,
-        ),
-        foreign_keys=[entityNumber],
-        viewonly=True,
-        back_populates='customerAddresses',
-        lazy='joined',
-    )
