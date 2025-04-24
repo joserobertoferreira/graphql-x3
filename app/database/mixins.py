@@ -28,7 +28,7 @@ class AuditMixin:
             'CREUSR_0',
             Unicode(5, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -37,14 +37,12 @@ class AuditMixin:
             'UPDUSR_0',
             Unicode(5, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
     def createDatetime(cls) -> Mapped[datetime.datetime]:
-        return mapped_column(
-            'CREDATTIM_0', DateTime, nullable=False, server_default=func.now()
-        )
+        return mapped_column('CREDATTIM_0', DateTime, nullable=False, default=func.now())
 
     @declared_attr
     def updateDatetime(cls) -> Mapped[datetime.datetime]:
@@ -52,21 +50,17 @@ class AuditMixin:
             'UPDDATTIM_0',
             DateTime,
             nullable=False,
-            server_default=func.now(),
+            default=func.now(),
             onupdate=func.now(),
         )
 
     @declared_attr
     def uniqueID(cls) -> Mapped[bytes]:
-        return mapped_column(
-            'AUUID_0', BINARY(16), nullable=False, default=lambda: uuid.uuid4().bytes
-        )
+        return mapped_column('AUUID_0', BINARY(16), nullable=False, default=lambda: uuid.uuid4().bytes)
 
     @declared_attr
     def updateChanges(cls) -> Mapped[int]:
-        return mapped_column(
-            'UPDTICK_0', Integer, server_default=text('((1))'), nullable=False
-        )
+        return mapped_column('UPDTICK_0', Integer, default=text('((1))'), nullable=False)
 
 
 class PrimaryKeyMixin:
@@ -94,9 +88,7 @@ class CreateUpdateDateMixin:
 
     @declared_attr
     def createDate(cls) -> Mapped[datetime.datetime]:
-        return mapped_column(
-            'CREDAT_0', DateTime, nullable=False, server_default=func.now()
-        )
+        return mapped_column('CREDAT_0', DateTime, nullable=False, default=func.now())
 
     @declared_attr
     def updateDate(cls) -> Mapped[datetime.datetime]:
@@ -104,7 +96,7 @@ class CreateUpdateDateMixin:
             'UPDDAT_0',
             DateTime,
             nullable=False,
-            server_default=func.now(),
+            default=func.now(),
             onupdate=func.now(),
         )
 
@@ -121,7 +113,7 @@ class DimensionTypesMixin:
             'DIE_0',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -130,7 +122,7 @@ class DimensionTypesMixin:
             'DIE_1',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -139,7 +131,7 @@ class DimensionTypesMixin:
             'DIE_2',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -148,7 +140,7 @@ class DimensionTypesMixin:
             'DIE_3',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -157,7 +149,7 @@ class DimensionTypesMixin:
             'DIE_4',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -166,7 +158,7 @@ class DimensionTypesMixin:
             'DIE_5',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -175,7 +167,7 @@ class DimensionTypesMixin:
             'DIE_6',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -184,7 +176,7 @@ class DimensionTypesMixin:
             'DIE_7',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -193,7 +185,7 @@ class DimensionTypesMixin:
             'DIE_8',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -202,7 +194,7 @@ class DimensionTypesMixin:
             'DIE_9',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -211,7 +203,7 @@ class DimensionTypesMixin:
             'DIE_10',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -220,7 +212,7 @@ class DimensionTypesMixin:
             'DIE_11',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -229,7 +221,7 @@ class DimensionTypesMixin:
             'DIE_12',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -238,7 +230,7 @@ class DimensionTypesMixin:
             'DIE_13',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -247,7 +239,7 @@ class DimensionTypesMixin:
             'DIE_14',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -256,7 +248,7 @@ class DimensionTypesMixin:
             'DIE_15',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -265,7 +257,7 @@ class DimensionTypesMixin:
             'DIE_16',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -274,7 +266,7 @@ class DimensionTypesMixin:
             'DIE_17',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -283,7 +275,7 @@ class DimensionTypesMixin:
             'DIE_18',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -292,7 +284,7 @@ class DimensionTypesMixin:
             'DIE_19',
             Unicode(10, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
 
@@ -308,7 +300,7 @@ class DimensionMixin:
             'CCE_0',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -317,7 +309,7 @@ class DimensionMixin:
             'CCE_1',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -326,7 +318,7 @@ class DimensionMixin:
             'CCE_2',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -335,7 +327,7 @@ class DimensionMixin:
             'CCE_3',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -344,7 +336,7 @@ class DimensionMixin:
             'CCE_4',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -353,7 +345,7 @@ class DimensionMixin:
             'CCE_5',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -362,7 +354,7 @@ class DimensionMixin:
             'CCE_6',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -371,7 +363,7 @@ class DimensionMixin:
             'CCE_7',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -380,7 +372,7 @@ class DimensionMixin:
             'CCE_8',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -389,7 +381,7 @@ class DimensionMixin:
             'CCE_9',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -398,7 +390,7 @@ class DimensionMixin:
             'CCE_10',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -407,7 +399,7 @@ class DimensionMixin:
             'CCE_11',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -416,7 +408,7 @@ class DimensionMixin:
             'CCE_12',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -425,7 +417,7 @@ class DimensionMixin:
             'CCE_13',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -434,7 +426,7 @@ class DimensionMixin:
             'CCE_14',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -443,7 +435,7 @@ class DimensionMixin:
             'CCE_15',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -452,7 +444,7 @@ class DimensionMixin:
             'CCE_16',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -461,7 +453,7 @@ class DimensionMixin:
             'CCE_17',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -470,7 +462,7 @@ class DimensionMixin:
             'CCE_18',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
 
     @declared_attr
@@ -479,5 +471,5 @@ class DimensionMixin:
             'CCE_19',
             Unicode(15, 'Latin1_General_BIN2'),
             nullable=False,
-            server_default=text("''"),
+            default=text("''"),
         )
