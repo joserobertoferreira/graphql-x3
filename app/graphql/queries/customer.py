@@ -18,7 +18,7 @@ class CustomerQuery:
         """Fetches all customers with their associated addresses."""
         db: Session = info.context['db']
 
-        stmt = select(CustomerModel)
+        stmt = select(CustomerModel).order_by(CustomerModel.customerCode)
         result = db.execute(stmt)
         customers_db = result.scalars().unique().all()
 
@@ -38,6 +38,6 @@ class CustomerQuery:
         customer_db = result.scalars().unique().one_or_none()
 
         if not customer_db:
-            return ''
+            return None
 
         return customer_db

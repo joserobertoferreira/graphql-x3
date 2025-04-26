@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from strawberry.types import Info
 
 from app.graphql.types.site import Site as SiteType
-from app.models.sites import Sites as SitesModel
+from app.models.corporation import Sites as SitesModel
 
 ContextType = dict
 
@@ -38,6 +38,6 @@ class SiteQuery:
         site_db = result.scalars().unique().one_or_none()
 
         if not site_db:
-            return ''
+            return None
 
         return site_db

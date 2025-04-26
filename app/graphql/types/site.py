@@ -1,8 +1,11 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, Annotated, List, Optional
 
 import strawberry
 
 from app.graphql.types.address import Address as AddressType
+
+if TYPE_CHECKING:
+    from app.graphql.types.company import Company
 
 
 @strawberry.type
@@ -19,4 +22,8 @@ class Site:
 
     siteAddresses: List[AddressType] = strawberry.field(
         description='List of addresses associated with this site (entityType=3)'
+    )
+
+    company: Annotated['Company', strawberry.lazy('app.graphql.types.company')] = strawberry.field(
+        description='Company associated with this site',
     )

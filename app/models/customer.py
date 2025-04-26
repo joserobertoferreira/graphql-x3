@@ -3,7 +3,7 @@ import decimal
 from typing import TYPE_CHECKING, List, Optional
 
 from sqlalchemy import (
-    DateTime,
+    Date,
     Index,
     Integer,
     Numeric,
@@ -15,7 +15,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.mssql import TINYINT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.settings import DEFAULT_LEGACY_DATETIME
+from app.core.settings import DEFAULT_LEGACY_DATE
 from app.database.base import Base
 from app.database.generics_mixins import ArrayColumnMixin
 from app.database.mixins import AuditMixin, CreateUpdateDateMixin, PrimaryKeyMixin
@@ -90,8 +90,8 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         'ORDMINAMT_0', Numeric(27, 13), server_default=text('((0))')
     )
     creditInsurance: Mapped[decimal.Decimal] = mapped_column('CDTISR_0', Numeric(27, 13), server_default=text('((0))'))
-    insuranceDate: Mapped[datetime.datetime] = mapped_column(
-        'CDTISRDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    insuranceDate: Mapped[datetime.date] = mapped_column(
+        'CDTISRDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
     insuranceCompany: Mapped[str] = mapped_column(
         'BPCCDTISR_0', Unicode(15, 'Latin1_General_BIN2'), server_default=text("''")
@@ -127,22 +127,22 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         'COTCHX_0', Unicode(20, 'Latin1_General_BIN2'), server_default=text("''")
     )
     necessaryTokens: Mapped[int] = mapped_column('COTPITRQD_0', Integer, server_default=text('((0))'))
-    firstContactDate: Mapped[datetime.datetime] = mapped_column(
-        'CNTFIRDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    firstContactDate: Mapped[datetime.date] = mapped_column(
+        'CNTFIRDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
-    lastContactDate: Mapped[datetime.datetime] = mapped_column(
-        'CNTLASDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    lastContactDate: Mapped[datetime.date] = mapped_column(
+        'CNTLASDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
-    nextContactDate: Mapped[datetime.datetime] = mapped_column(
-        'CNTNEXDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    nextContactDate: Mapped[datetime.date] = mapped_column(
+        'CNTNEXDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
     lastContactType: Mapped[int] = mapped_column('CNTLASTYP_0', TINYINT, server_default=text('((1))'))
     nextContactType: Mapped[int] = mapped_column('CNTNEXTYP_0', TINYINT, server_default=text('((1))'))
-    firstOrderDate: Mapped[datetime.datetime] = mapped_column(
-        'ORDFIRDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    firstOrderDate: Mapped[datetime.date] = mapped_column(
+        'ORDFIRDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
-    lastQuoteDate: Mapped[datetime.datetime] = mapped_column(
-        'QUOLASDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    lastQuoteDate: Mapped[datetime.date] = mapped_column(
+        'QUOLASDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
     classABC: Mapped[int] = mapped_column('ABCCLS_0', TINYINT, server_default=text('((1))'))
     vatCollectionAgent: Mapped[int] = mapped_column('AGTPCP_0', SmallInteger, server_default=text('((0))'))
@@ -153,8 +153,8 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
     accountStructure: Mapped[str] = mapped_column(
         'DIA_0', Unicode(10, 'Latin1_General_BIN2'), server_default=text("''")
     )
-    customerSince: Mapped[datetime.datetime] = mapped_column(
-        'BPCSNCDAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    customerSince: Mapped[datetime.date] = mapped_column(
+        'BPCSNCDAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
     exportNumber: Mapped[int] = mapped_column('EXPNUM_0', Integer, server_default=text('((0))'))
     unavailablePeriod: Mapped[str] = mapped_column(
@@ -166,8 +166,8 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
     )
     isElectronicInvoice: Mapped[int] = mapped_column('ELECTINV_0', TINYINT, server_default=text('((1))'))
     contact: Mapped[str] = mapped_column('CNTEFAT_0', Unicode(15, 'Latin1_General_BIN2'), server_default=text("''"))
-    startDataElectronicInvoice: Mapped[datetime.datetime] = mapped_column(
-        'STRDATEFAT_0', DateTime, server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'")
+    startDataElectronicInvoice: Mapped[datetime.date] = mapped_column(
+        'STRDATEFAT_0', Date, server_default=text(f"'{DEFAULT_LEGACY_DATE}'")
     )
     isElectronicInvoiceAllowed: Mapped[int] = mapped_column('AEIFLG_0', SmallInteger, server_default=text('((0))'))
     isEditor: Mapped[int] = mapped_column('ZEDITOR_0', TINYINT, server_default=text('((1))'))
@@ -297,12 +297,12 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         db_column_prefix='VATSTRDAT',
         property_name='vatStartDate',
         count=9,
-        column_type=DateTime,
-        python_type=datetime.datetime,
-        server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'"),
+        column_type=Date,
+        python_type=datetime.date,
+        server_default=text(f"'{DEFAULT_LEGACY_DATE}'"),
     )
 
-    vatStartDate: Mapped[List[Optional[datetime.datetime]]] = _properties
+    vatStartDate: Mapped[List[Optional[datetime.date]]] = _properties
 
     for _attr_name, _mapped_column in _columns.items():
         locals()[_attr_name] = _mapped_column
@@ -313,12 +313,12 @@ class Customer(Base, AuditMixin, PrimaryKeyMixin, CreateUpdateDateMixin, ArrayCo
         db_column_prefix='VATENDDAT',
         property_name='vatEndDate',
         count=9,
-        column_type=DateTime,
-        python_type=datetime.datetime,
-        server_default=text(f"'{DEFAULT_LEGACY_DATETIME}'"),
+        column_type=Date,
+        python_type=datetime.date,
+        server_default=text(f"'{DEFAULT_LEGACY_DATE}'"),
     )
 
-    vatEndDate: Mapped[List[Optional[datetime.datetime]]] = _properties
+    vatEndDate: Mapped[List[Optional[datetime.date]]] = _properties
 
     for _attr_name, _mapped_column in _columns.items():
         locals()[_attr_name] = _mapped_column

@@ -87,11 +87,11 @@ class CreateUpdateDateMixin:
     """
 
     @declared_attr
-    def createDate(cls) -> Mapped[datetime.datetime]:
+    def createDate(cls) -> Mapped[datetime.date]:
         return mapped_column('CREDAT_0', DateTime, nullable=False, default=func.now())
 
     @declared_attr
-    def updateDate(cls) -> Mapped[datetime.datetime]:
+    def updateDate(cls) -> Mapped[datetime.date]:
         return mapped_column(
             'UPDDAT_0',
             DateTime,

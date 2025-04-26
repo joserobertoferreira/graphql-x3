@@ -1,14 +1,14 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class Chapter1(Enum):
+class Chapter1(IntEnum):
     """Chapter 1: Menu type"""
 
     NO = 1
     YES = 2
 
 
-class Chapter45(Enum):
+class Chapter45(IntEnum):
     """Chapter 45: Definition level"""
 
     FOLDER = 1
@@ -16,14 +16,14 @@ class Chapter45(Enum):
     SITE = 3
 
 
-class Chapter46(Enum):
+class Chapter46(IntEnum):
     """Chapter 46: Sequence number type"""
 
     ALPHANUMERIC = 1
     NUMERIC = 2
 
 
-class Chapter47(Enum):
+class Chapter47(IntEnum):
     """Chapter 47: Sequence number fields"""
 
     CONSTANT = 1
@@ -40,7 +40,7 @@ class Chapter47(Enum):
     FORMULA = 12
 
 
-class Chapter48(Enum):
+class Chapter48(IntEnum):
     """Chapter 48: Reset sequence number to zero"""
 
     NO_RTZ = 1

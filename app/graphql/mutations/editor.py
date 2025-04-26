@@ -4,21 +4,21 @@ from strawberry.types import Info
 
 from app.graphql.types.editor import EditorInput, EditorType
 from app.models.editor import Editor as EditorModel
-from app.services.counters import get_next_editor_id_sync
+from app.services.counters import get_next_counter
 
 ContextType = dict
 
 
 # --- Função Síncrona Auxiliar para Lógica de DB ---
-def _create_editor_sync(db: Session, editor_input: EditorInput, current_user: str) -> EditorModel:
+def _create_editor(db: Session, editor_input: EditorInput, current_user: str) -> EditorModel:
     """Função síncrona que executa toda a lógica de banco de dados."""
     try:
         # 1. Obter o próximo editor_id sequencial (chamada síncrona)
-        next_id_str = get_next_editor_id_sync(db)  # Chama a função sync
+        next_id_str = get_next_counter(db, 'ZRDX')
 
-        print(f'Próximo editor_id: {next_id_str}')
+        if not next_id_str:
+            raise ValueError('Não foi possível obter o próximo ID do contador.')
 
-        # 2. Criar a instância do modelo SQLAlchemy
         new_editor = EditorModel(
             name=editor_input.name,
             contact=editor_input.contact,
@@ -29,23 +29,12 @@ def _create_editor_sync(db: Session, editor_input: EditorInput, current_user: st
             updateUser=current_user,
         )
 
-        # 3. Adicionar ao session
         db.add(new_editor)
-
-        # 4. Fazer flush para garantir que não há erros imediatos
-        #    e para que o ID (ROWID) possa ser potencialmente acessado
-        #    antes do commit se necessário (embora refresh após commit seja mais seguro)
         db.flush()
-
-        # 5. Commitar a transação (salva contador e editor)
         db.commit()
-
-        # 6. Refrescar para obter valores gerados pelo DB (ROWID é o principal)
-        #    Embora o flush possa atribuir o ID, o refresh é mais garantido
-        #    após o commit.
         db.refresh(new_editor)
 
-        print(f'Editor criado (sync) com ROWID: {new_editor.id} e EditorID: {new_editor.editor_id}')
+        print(f'Editor criado com ROWID: {new_editor.id} e EditorID: {new_editor.editor_id}')
 
         return new_editor
 
@@ -53,7 +42,7 @@ def _create_editor_sync(db: Session, editor_input: EditorInput, current_user: st
         # logging.error(f'Erro dentro de _create_editor_sync: {e}', exc_info=True)
         db.rollback()  # Desfaz tudo se houve erro
         # Re-levanta a exceção para ser pega pelo run_sync/resolver
-        raise ValueError(f'Não foi possível criar o editor (sync): {e}') from e
+        raise ValueError(f'Não foi possível criar o editor: {e}') from e
 
 
 # --- Classe de Mutação Strawberry ---
@@ -73,18 +62,18 @@ class EditorMutation:
 
         try:
             # 2. Executar a função síncrona auxiliar em um thread separado
-            new_editor_instance = _create_editor_sync(db=db, editor_input=editor_input, current_user=current_user)
+            new_editor_instance = _create_editor(db=db, editor_input=editor_input, current_user=current_user)
             # Alternativa Python 3.9+:
             # new_editor_instance = await asyncio.to_thread(
-            #     _create_editor_sync, db, editor_input, current_user
+            #     _create_editor, db, editor_input, current_user
             # )
 
             # 3. Retornar o resultado (Strawberry mapeará para EditorType)
             return new_editor_instance
 
         except Exception as e:
-            # Captura exceções levantadas por _create_editor_sync
-            # logging.error(f'Erro no resolver create_editor chamando run_sync: {e}', exc_info=True)
+            # Captura exceções levantadas por _create_editor
+            # logging.error(f'Erro no resolver create_editor chamando run: {e}', exc_info=True)
             # Retorne um erro GraphQL apropriado
             # Você pode querer usar um tipo de erro GraphQL customizado
             raise Exception(f'Erro ao processar a criação do editor: {e}')

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import strawberry
 
@@ -17,14 +17,6 @@ class Address:
     state: Optional[str]
     country: Optional[str]
     countryName: Optional[str]
-    addressPhoneNumber0: Optional[str]
-    addressPhoneNumber1: Optional[str]
-    addressPhoneNumber2: Optional[str]
-    addressPhoneNumber3: Optional[str]
-    addressPhoneNumber4: Optional[str]
-    addressEmail0: Optional[str]
-    addressEmail1: Optional[str]
-    addressEmail2: Optional[str]
-    addressEmail3: Optional[str]
-    addressEmail4: Optional[str]
+    phoneNumbers: List[Optional[str]]
+    emails: List[Optional[str]]
     website: Optional[str]
