@@ -30,6 +30,7 @@ class CompanyQuery:
     @strawberry.field
     def company(self, info: Info[ContextType, None], company: str) -> Optional[CompanyType]:  # noqa: PLR6301
         """Fetches a single company by its company, including addresses."""
+
         db: Session = info.context['db']
 
         stmt = select(CompanyModel).where(CompanyModel.company == company)
