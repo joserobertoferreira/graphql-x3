@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from strawberry.types import Info
 
 from app.graphql.types.site import Site as SiteType
+from app.middleware.auth.permissions import IsAuthenticated
 from app.models.corporation import Sites as SitesModel
 
 ContextType = dict
@@ -13,7 +14,7 @@ ContextType = dict
 
 @strawberry.type
 class SiteQuery:
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def sites(self, info: Info[ContextType, None]) -> List[SiteType]:  # noqa: PLR6301
         """Fetches all sites with their associated addresses."""
         db: Session = info.context['db']
@@ -27,7 +28,7 @@ class SiteQuery:
 
         return sites_db
 
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def site(self, info: Info[ContextType, None], code: str) -> Optional[SiteType]:  # noqa: PLR6301
         """Fetches a single site by its code, including addresses."""
         db: Session = info.context['db']

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from strawberry.types import Info
 
 from app.graphql.types.customer import Customer as CustomerType
+from app.middleware.auth.permissions import IsAuthenticated
 from app.models.customer import Customer as CustomerModel
 
 ContextType = dict
@@ -13,7 +14,7 @@ ContextType = dict
 
 @strawberry.type
 class CustomerQuery:
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def customers(self, info: Info[ContextType, None]) -> List[CustomerType]:  # noqa: PLR6301
         """Fetches all customers with their associated addresses."""
         db: Session = info.context['db']
@@ -27,7 +28,7 @@ class CustomerQuery:
 
         return customers_db
 
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def customer(self, info: Info[ContextType, None], code: str) -> Optional[CustomerType]:  # noqa: PLR6301
         """Fetches a single customer by its code, including addresses."""
         db: Session = info.context['db']

@@ -16,19 +16,20 @@ from sqlalchemy import (
 from sqlalchemy.dialects.mssql import TINYINT
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from app.database.base import Base
+
 
 class Base(DeclarativeBase):
     pass
 
 
-class BPARTNER(Base):
+class Partner(Base):
     __tablename__ = 'BPARTNER'
     __table_args__ = (
         PrimaryKeyConstraint('ROWID', name='BPARTNER_ROWID'),
         Index('BPARTNER_BPR0', 'BPRNUM_0', unique=True),
         Index('BPARTNER_BPR1', 'BPRSHO_0'),
         Index('BPARTNER_BPR2', 'BETFCY_0', 'FCY_0', 'BPRNUM_0', unique=True),
-        {'schema': 'MINP'},
     )
 
     UPDTICK_0: Mapped[int] = mapped_column(Integer, server_default=text('((1))'))

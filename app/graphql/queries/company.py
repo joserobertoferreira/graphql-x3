@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from strawberry.types import Info
 
 from app.graphql.types.company import Company as CompanyType
+from app.middleware.auth.permissions import IsAuthenticated
 from app.models.corporation import Company as CompanyModel
 
 ContextType = dict
@@ -13,7 +14,7 @@ ContextType = dict
 
 @strawberry.type
 class CompanyQuery:
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def companies(self, info: Info[ContextType, None]) -> List[CompanyType]:  # noqa: PLR6301
         """Fetches all companies with their associated addresses."""
         db: Session = info.context['db']
@@ -27,7 +28,7 @@ class CompanyQuery:
 
         return companies_db
 
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def company(self, info: Info[ContextType, None], company: str) -> Optional[CompanyType]:  # noqa: PLR6301
         """Fetches a single company by its company, including addresses."""
 

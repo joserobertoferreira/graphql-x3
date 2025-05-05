@@ -23,19 +23,16 @@ class AuthenticationService:
     def login(db: Session, login_data: LoginInput):
         user_ok = UserRepository.get_by_username_email(db, login_data.username, None)
 
-        print(user_ok.username, user_ok.password)
-
         if user_ok:
-            print(login_data.password)
             hash = AuthenticationService.pwd_context.hash(login_data.password)
-            print(hash)
-
             password_ok = AuthenticationService.pwd_context.verify(login_data.password, hash)
 
         if not user_ok or not password_ok:
             raise ValueError('Invalid username or password')
 
-        token = JWTManager.create_access_token(user_ok)
+        payload = {'username': user_ok.username, 'password': hash}
+
+        token = JWTManager.create_access_token(data=payload)
 
         return LoginType(username=user_ok.username, token=token)
 

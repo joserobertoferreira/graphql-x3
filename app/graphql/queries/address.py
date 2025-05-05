@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from strawberry.types import Info
 
 from app.graphql.types.address import Address as AddressType
+from app.middleware.auth.permissions import IsAuthenticated
 from app.models.address import Address as AddressModel
 
 ContextType = dict
@@ -13,7 +14,7 @@ ContextType = dict
 
 @strawberry.type
 class AddressQuery:
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     def addresses_by_entity(  # noqa: PLR6301
         self, info: Info[ContextType, None], entity_number: str
     ) -> List[AddressType]:
